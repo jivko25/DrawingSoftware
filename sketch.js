@@ -77,10 +77,15 @@ function handleFile(file) {
   }
 
 function mouseReleased(){
+    let colorStroke = selector("#pen-color").value;
+    let colorFill = selector("#pen-color-fill").value;
     if(selector("#pen-line").checked){
         type = "line";
     } else if(selector("#pen-circle").checked){
         type = "circle";
+    }
+    else{
+        type = null;
     }
     mouseReleasedX = mouseX;
     mouseReleasedY = mouseY;
@@ -88,12 +93,15 @@ function mouseReleased(){
     if(type == "line"){
         line(mouseClickedX, mouseClickedY, mouseReleasedX, mouseReleasedY);
     } else if(type == "circle"){
+        fill(colorFill);
+        stroke(colorStroke);
         ellipse((mouseReleasedX + mouseClickedX)/2,
                 (mouseReleasedY + mouseClickedY)/2,
                 // Math.abs((mouseClickedX-mouseReleasedX),
                 Math.max(mouseClickedX, mouseReleasedX) - Math.min(mouseClickedX, mouseReleasedX) ,
                 Math.max(mouseClickedY, mouseReleasedY) - Math.min(mouseClickedY, mouseReleasedY));
     }
+    else{}
 }
 
 function mousePressed(){
