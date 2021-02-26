@@ -79,12 +79,20 @@ function handleFile(file) {
 function mouseReleased(){
     if(selector("#pen-line").checked){
         type = "line";
+    } else if(selector("#pen-circle").checked){
+        type = "circle";
     }
     mouseReleasedX = mouseX;
     mouseReleasedY = mouseY;
     console.log(mouseReleasedX, mouseReleasedY);
     if(type == "line"){
-    line(mouseClickedX, mouseClickedY, mouseReleasedX, mouseReleasedY);
+        line(mouseClickedX, mouseClickedY, mouseReleasedX, mouseReleasedY);
+    } else if(type == "circle"){
+        ellipse((mouseReleasedX + mouseClickedX)/2,
+                (mouseReleasedY + mouseClickedY)/2,
+                // Math.abs((mouseClickedX-mouseReleasedX),
+                Math.max(mouseClickedX, mouseReleasedX) - Math.min(mouseClickedX, mouseReleasedX) ,
+                Math.max(mouseClickedY, mouseReleasedY) - Math.min(mouseClickedY, mouseReleasedY));
     }
 }
 
