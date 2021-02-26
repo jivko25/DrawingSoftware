@@ -1,6 +1,10 @@
 let input;
 let img;
 var imageIsSelected = false;
+var mouseClickedX;
+var mouseClickedY;
+var mouseReleasedX;
+var mouseReleasedY;
 
 function selector(select){
     return document.querySelector(select);
@@ -27,6 +31,7 @@ function draw(){
         image(img, 0, 0, width, height);
         imageIsSelected = true;
       }
+    //   line(mouseClickedX, mouseClickedY, mouseReleasedX, mouseReleasedY);
 }
 
 function mouseDragged(){
@@ -38,13 +43,14 @@ function mouseDragged(){
     } else if(selector("#pen-brush").checked){
         type = "brush";
     } else if(selector("#pen-eraser").checked){
+        type = "brush";
         color = "#ffffff";
-    }
+    } 
     fill(color);
     stroke(color);
     if(type == "pencil"){
         line(pmouseX, pmouseY, mouseX, mouseY);
-    } else{
+    } else if(type == "brush"){
         ellipse(mouseX, mouseY, size, size);
     }
 }
@@ -69,5 +75,23 @@ function handleFile(file) {
       img = null;
     }
   }
+
+function mouseReleased(){
+    if(selector("#pen-line").checked){
+        type = "line";
+    }
+    mouseReleasedX = mouseX;
+    mouseReleasedY = mouseY;
+    console.log(mouseReleasedX, mouseReleasedY);
+    if(type == "line"){
+    line(mouseClickedX, mouseClickedY, mouseReleasedX, mouseReleasedY);
+    }
+}
+
+function mousePressed(){
+    mouseClickedX = mouseX;
+    mouseClickedY = mouseY;
+    console.log(mouseClickedX, mouseClickedY);
+}
 
 
