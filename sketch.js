@@ -9,6 +9,7 @@ var coppy = false;
 var move = false;
 var coppyArr = [];
 var copyCounter;
+// var input;
 
 function selector(select){
     return document.querySelector(select);
@@ -18,6 +19,9 @@ function setup(){
     let canvas = createCanvas(650, 600);
     // canvas.parent("#canvas-wrapper");
     background(255);
+    commandInput = createInput();
+    EnterButton = createButton('Enter');
+    EnterButton.mousePressed(prompt);
     Resetbutton = createButton('Reset');
     Resetbutton.mousePressed(resetBG);
     Savebutton = createButton('Save');
@@ -121,15 +125,20 @@ function mouseReleased(){
                 coppy = false;
         }
         console.log(coppyArr);
-        type = null;
+        type = "null";
     }
     else if(selector("#pen-line").checked){
         type = "line";
     } else if(selector("#pen-circle").checked){
         type = "circle";
-    }
+    } else if(selector("#pen-circle-fill").checked){
+        type = "circle-fill";
+    } 
+    // else if(selector("#pen-star").checked){
+    //     type = "star";
+    // }
     else{
-        type = null;
+        type = "null";
     }
     mouseReleasedX = mouseX;
     mouseReleasedY = mouseY;
@@ -138,7 +147,7 @@ function mouseReleased(){
         stroke(colorStroke);
         strokeWeight(size);
         line(mouseClickedX, mouseClickedY, mouseReleasedX, mouseReleasedY);
-    } else if(type == "circle"){
+    } else if(type == "circle-fill"){
         fill(colorFill);
         stroke(colorStroke);
         strokeWeight(size);
@@ -147,7 +156,35 @@ function mouseReleased(){
                 // Math.abs((mouseClickedX-mouseReleasedX),
                 Math.max(mouseClickedX, mouseReleasedX) - Math.min(mouseClickedX, mouseReleasedX) ,
                 Math.max(mouseClickedY, mouseReleasedY) - Math.min(mouseClickedY, mouseReleasedY));
+    } else if(type == "circle"){
+        noFill();
+        stroke(colorStroke);
+        strokeWeight(size);
+        ellipse((mouseReleasedX + mouseClickedX)/2,
+                (mouseReleasedY + mouseClickedY)/2,
+                // Math.abs((mouseClickedX-mouseReleasedX),
+                Math.max(mouseClickedX, mouseReleasedX) - Math.min(mouseClickedX, mouseReleasedX) ,
+                Math.max(mouseClickedY, mouseReleasedY) - Math.min(mouseClickedY, mouseReleasedY));
     }
+    // } else if(type === "star"){
+    //     stroke(colorStroke);
+    //     strokeWeight(size);
+    //     line((mouseReleasedX + mouseClickedX)/2,
+    //          mouseClickedY,
+    //          (mouseReleasedX + mouseClickedX)*0.4,
+    //          (mouseReleasedY + mouseClickedY)*0.4
+    //     )
+    //     line((mouseReleasedX + mouseClickedX)*0.4,
+    //          (mouseReleasedY + mouseClickedY)*0.4,
+    //          mouseClickedX,
+    //          (mouseReleasedY + mouseClickedY)*0.4
+    //     )
+    //     line(mouseClickedX,
+    //          (mouseReleasedY + mouseClickedY)*0.4,
+    //          (mouseReleasedX + mouseClickedX)*0.3,
+    //          (mouseReleasedY + mouseClickedY)*0.6
+    //     )
+    // }
     else{}
 }
 
@@ -164,8 +201,51 @@ function keyPressed() {
     rect(Math.min(mouseClickedX, mouseReleasedX), Math.min(mouseClickedY, mouseReleasedY),
             Math.max(mouseClickedX, mouseReleasedX) - Math.min(mouseClickedX, mouseReleasedX) ,
             Math.max(mouseClickedY, mouseReleasedY) - Math.min(mouseClickedY, mouseReleasedY));
-  } 
-  return false; // prevent default
+  } else if(keyCode == 13){
+      prompt();
+  }
+//   return false; // prevent default
+}
+
+function prompt() {
+    let inputv = commandInput.value();
+    let inputArr = inputv.split(' ');
+    let colorStroke = selector("#pen-color").value;
+    let colorFill = selector("#pen-color-fill").value;
+    let size = parseInt(selector("#pen-size").value);
+    stroke(colorStroke);
+    strokeWeight(size);
+    fill(colorFill);
+    switch (inputArr[0]) {
+        case "line":
+            line(inputArr[1], inputArr[2], inputArr[3], inputArr[4]);
+            commandInput.value('');
+            break;
+        case "ellipse":
+            noFill();
+            ellipse(inputArr[1], inputArr[2], inputArr[3], inputArr[4]);
+            commandInput.value('');
+            break;
+        case "ellipseFilled":
+            ellipse(inputArr[1], inputArr[2], inputArr[3], inputArr[4]);
+            commandInput.value('');
+            break;
+        case "square":
+            square(inputArr[1], inputArr[2], inputArr[3]);
+            commandInput.value('');
+            break;
+        case "rectangular":
+            rect(inputArr[1], inputArr[2], inputArr[3], inputArr[4]);
+            commandInput.value('');
+            break;
+        case "triangle":
+            triangle(inputArr[1], inputArr[2], inputArr[3], inputArr[4], inputArr[5], inputArr[6]);
+            commandInput.value('');
+            break;
+        default:
+            console.log("Wrong input!");
+            break;
+    }
 }
 
 
