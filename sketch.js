@@ -134,9 +134,9 @@ function mouseReleased(){
     } else if(selector("#pen-circle-fill").checked){
         type = "circle-fill";
     } 
-    // else if(selector("#pen-star").checked){
-    //     type = "star";
-    // }
+    else if(selector("#pen-star").checked){
+        type = "star";
+    }
     else{
         type = "null";
     }
@@ -166,25 +166,71 @@ function mouseReleased(){
                 Math.max(mouseClickedX, mouseReleasedX) - Math.min(mouseClickedX, mouseReleasedX) ,
                 Math.max(mouseClickedY, mouseReleasedY) - Math.min(mouseClickedY, mouseReleasedY));
     }
-    // } else if(type === "star"){
-    //     stroke(colorStroke);
-    //     strokeWeight(size);
-    //     line((mouseReleasedX + mouseClickedX)/2,
-    //          mouseClickedY,
-    //          (mouseReleasedX + mouseClickedX)*0.4,
-    //          (mouseReleasedY + mouseClickedY)*0.4
-    //     )
-    //     line((mouseReleasedX + mouseClickedX)*0.4,
-    //          (mouseReleasedY + mouseClickedY)*0.4,
-    //          mouseClickedX,
-    //          (mouseReleasedY + mouseClickedY)*0.4
-    //     )
-    //     line(mouseClickedX,
-    //          (mouseReleasedY + mouseClickedY)*0.4,
-    //          (mouseReleasedX + mouseClickedX)*0.3,
-    //          (mouseReleasedY + mouseClickedY)*0.6
-    //     )
-    // }
+    else if(type === "star"){
+        stroke(colorStroke);
+        strokeWeight(size);
+        line(mouseClickedX, 
+            mouseReleasedY,
+            (mouseReleasedX + mouseClickedX)/2,
+            mouseClickedY
+            );
+        line(
+            (mouseReleasedX + mouseClickedX)/2,
+            mouseClickedY,
+            mouseReleasedX,
+            mouseReleasedY
+            );
+        line(
+            mouseReleasedX,
+            mouseReleasedY,
+            mouseClickedX,
+            (mouseReleasedY + mouseClickedY)/2
+            );
+        line(
+            mouseClickedX,
+            (mouseReleasedY + mouseClickedY)/2,
+            mouseReleasedX,
+            (mouseReleasedY + mouseClickedY)/2
+            );
+        line(
+            mouseReleasedX,
+            (mouseReleasedY + mouseClickedY)/2,
+            mouseClickedX, 
+            mouseReleasedY
+            );
+        //star 2
+        // line(
+        //     (mouseReleasedX + mouseClickedX)*0.4,
+        //     mouseReleasedY,
+        //     (mouseReleasedX + mouseClickedX)/2,
+        //     mouseClickedY
+        // );
+        // line(
+        //     (mouseReleasedX + mouseClickedX)/2,
+        //     mouseClickedY,
+        //     (mouseReleasedX + mouseClickedX)*0.56,
+        //     mouseReleasedY
+        // );
+        // line(
+        //     (mouseReleasedX + mouseClickedX)*0.56,
+        //     mouseReleasedY,
+        //     mouseClickedX,
+        //     (mouseReleasedY + mouseClickedY)*0.48
+        // );
+        // line(
+        //     mouseClickedX,
+        //     (mouseReleasedY + mouseClickedY)*0.48,
+        //     mouseReleasedX,
+        //     (mouseReleasedY + mouseClickedY)*0.48
+        // );
+        // line(
+        //     mouseReleasedX,
+        //     (mouseReleasedY + mouseClickedY)*0.48,
+        //     (mouseReleasedX + mouseClickedX)*0.4,
+        //     mouseReleasedY
+        // );
+        
+    }
     else{}
 }
 
@@ -201,7 +247,7 @@ function keyPressed() {
     rect(Math.min(mouseClickedX, mouseReleasedX), Math.min(mouseClickedY, mouseReleasedY),
             Math.max(mouseClickedX, mouseReleasedX) - Math.min(mouseClickedX, mouseReleasedX) ,
             Math.max(mouseClickedY, mouseReleasedY) - Math.min(mouseClickedY, mouseReleasedY));
-  } else if(keyCode == 13){
+  } else if(keyCode === 13){
       prompt();
   }
 //   return false; // prevent default
@@ -241,6 +287,27 @@ function prompt() {
         case "triangle":
             triangle(inputArr[1], inputArr[2], inputArr[3], inputArr[4], inputArr[5], inputArr[6]);
             commandInput.value('');
+            break;
+        case "copy":
+                copy(inputArr[1], inputArr[2], inputArr[3], inputArr[4], inputArr[5], inputArr[6], inputArr[3], inputArr[4]);
+                commandInput.value('');
+                break;
+        case "cut":
+                copy(inputArr[1], inputArr[2], inputArr[3], inputArr[4], inputArr[5], inputArr[6], inputArr[3], inputArr[4]);
+                stroke(255);
+                fill(255);
+                rect(inputArr[1], inputArr[2], inputArr[3], inputArr[4]);
+                commandInput.value('');
+                break;
+        case "delete":
+            stroke(255);
+            fill(255);
+            rect(
+                Math.min(inputArr[1], inputArr[3]), 
+                Math.min(inputArr[2],inputArr[4]),
+                Math.max(inputArr[1], inputArr[3]) - Math.min(inputArr[1], inputArr[3]),
+                Math.max(inputArr[2], inputArr[4]) - Math.min(inputArr[2], inputArr[4]));
+                commandInput.value('');
             break;
         default:
             console.log("Wrong input!");
