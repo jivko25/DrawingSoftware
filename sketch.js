@@ -103,7 +103,7 @@ function mouseReleased(){
         coppyArr.push(mouseY)
         copyCounter++;
         if(copyCounter == 4){
-            copy(coppyArr[2], coppyArr[3],
+            copy(Math.min(coppyArr[2], coppyArr[4]), Math.min(coppyArr[3], coppyArr[5]),
                 Math.max(coppyArr[2], coppyArr[4]) - Math.min(coppyArr[2], coppyArr[4]),
                 Math.max(coppyArr[3], coppyArr[5]) - Math.min(coppyArr[3], coppyArr[5]),
                 coppyArr[6], coppyArr[7],
@@ -113,7 +113,7 @@ function mouseReleased(){
                     console.log("enter");
                     fill(255);
                     stroke(255);
-                    rect(coppyArr[2], coppyArr[3],
+                    rect(Math.min(coppyArr[2], coppyArr[4]), Math.min(coppyArr[3], coppyArr[5]),
                         Math.max(coppyArr[2], coppyArr[4]) - Math.min(coppyArr[2], coppyArr[4]),
                         Math.max(coppyArr[3], coppyArr[5]) - Math.min(coppyArr[3], coppyArr[5]))
                         move = false;
@@ -155,6 +155,17 @@ function mousePressed(){
     mouseClickedX = mouseX;
     mouseClickedY = mouseY;
     // console.log(mouseClickedX, mouseClickedY);
+}
+
+function keyPressed() {
+  if (keyCode === 46) {
+    fill(255);
+    stroke(255);
+    rect(Math.min(mouseClickedX, mouseReleasedX), Math.min(mouseClickedY, mouseReleasedY),
+            Math.max(mouseClickedX, mouseReleasedX) - Math.min(mouseClickedX, mouseReleasedX) ,
+            Math.max(mouseClickedY, mouseReleasedY) - Math.min(mouseClickedY, mouseReleasedY));
+  } 
+  return false; // prevent default
 }
 
 
