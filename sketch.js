@@ -5,6 +5,9 @@ var mouseClickedX;
 var mouseClickedY;
 var mouseReleasedX;
 var mouseReleasedY;
+var coppy = false;
+var coppyArr = [];
+var copyCounter;
 
 function selector(select){
     return document.querySelector(select);
@@ -17,6 +20,12 @@ function setup(){
     Resetbutton = createButton('Reset');
     Resetbutton.mousePressed(resetBG);
     Savebutton = createButton('Save');
+    Coppybutton = createButton('Copy')
+                        .mousePressed(() => {
+                            coppy = true;
+                            copyCounter = 0;
+                            coppyArr = [];
+                        });
     Savebutton.mousePressed(savaImage);
     input = createFileInput(handleFile);
     if (img) {
@@ -31,7 +40,7 @@ function draw(){
         image(img, 0, 0, width, height);
         imageIsSelected = true;
       }
-    //   line(mouseClickedX, mouseClickedY, mouseReleasedX, mouseReleasedY);
+    // copy(0, 0, 200, 200, 450, 400, 200, 200);
 }
 
 function mouseDragged(){
@@ -49,6 +58,7 @@ function mouseDragged(){
     fill(color);
     stroke(color);
     if(type == "pencil"){
+        strokeWeight(1);
         line(pmouseX, pmouseY, mouseX, mouseY);
     } else if(type == "brush"){
         ellipse(mouseX, mouseY, size, size);
@@ -79,22 +89,42 @@ function handleFile(file) {
 function mouseReleased(){
     let colorStroke = selector("#pen-color").value;
     let colorFill = selector("#pen-color-fill").value;
+    let size = parseInt(selector("#pen-size").value);
     if(selector("#pen-line").checked){
         type = "line";
     } else if(selector("#pen-circle").checked){
         type = "circle";
+    }
+    else if(coppy){
+        coppyArr.push(mouseX)
+        coppyArr.push(mouseY)
+        copyCounter++;
+        if(copyCounter == 4){
+            console.log("enter");
+            copy(coppyArr[2], coppyArr[3],
+                Math.max(coppyArr[2], coppyArr[4]) - Math.min(coppyArr[2], coppyArr[4]),
+                Math.max(coppyArr[3], coppyArr[5]) - Math.min(coppyArr[3], coppyArr[5]),
+                coppyArr[6], coppyArr[7],
+                Math.max(coppyArr[2], coppyArr[4]) - Math.min(coppyArr[2], coppyArr[4]),
+                Math.max(coppyArr[3], coppyArr[5]) - Math.min(coppyArr[3], coppyArr[5]));
+        }
+        console.log(coppyArr);
+        type = null;
     }
     else{
         type = null;
     }
     mouseReleasedX = mouseX;
     mouseReleasedY = mouseY;
-    console.log(mouseReleasedX, mouseReleasedY);
+    // console.log(mouseReleasedX, mouseReleasedY);
     if(type == "line"){
+        stroke(colorStroke);
+        strokeWeight(size);
         line(mouseClickedX, mouseClickedY, mouseReleasedX, mouseReleasedY);
     } else if(type == "circle"){
         fill(colorFill);
         stroke(colorStroke);
+        strokeWeight(size);
         ellipse((mouseReleasedX + mouseClickedX)/2,
                 (mouseReleasedY + mouseClickedY)/2,
                 // Math.abs((mouseClickedX-mouseReleasedX),
@@ -107,7 +137,7 @@ function mouseReleased(){
 function mousePressed(){
     mouseClickedX = mouseX;
     mouseClickedY = mouseY;
-    console.log(mouseClickedX, mouseClickedY);
+    // console.log(mouseClickedX, mouseClickedY);
 }
 
 
