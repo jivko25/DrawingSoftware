@@ -6,6 +6,7 @@ var mouseClickedY;
 var mouseReleasedX;
 var mouseReleasedY;
 var coppy = false;
+var move = false;
 var coppyArr = [];
 var copyCounter;
 
@@ -23,6 +24,12 @@ function setup(){
     Coppybutton = createButton('Copy')
                         .mousePressed(() => {
                             coppy = true;
+                            copyCounter = 0;
+                            coppyArr = [];
+                        });
+    Movebutton = createButton('Move')
+                        .mousePressed(() => {
+                            move = true;
                             copyCounter = 0;
                             coppyArr = [];
                         });
@@ -47,7 +54,8 @@ function mouseDragged(){
     let type;
     let size = parseInt(selector("#pen-size").value);
     let color = selector("#pen-color").value;
-    if(selector("#pen-pencil").checked){
+    if(coppy || move){}
+    else if(selector("#pen-pencil").checked){
         type = "pencil";
     } else if(selector("#pen-brush").checked){
         type = "brush";
@@ -90,26 +98,35 @@ function mouseReleased(){
     let colorStroke = selector("#pen-color").value;
     let colorFill = selector("#pen-color-fill").value;
     let size = parseInt(selector("#pen-size").value);
-    if(selector("#pen-line").checked){
-        type = "line";
-    } else if(selector("#pen-circle").checked){
-        type = "circle";
-    }
-    else if(coppy){
+    if(coppy || move){
         coppyArr.push(mouseX)
         coppyArr.push(mouseY)
         copyCounter++;
         if(copyCounter == 4){
-            console.log("enter");
             copy(coppyArr[2], coppyArr[3],
                 Math.max(coppyArr[2], coppyArr[4]) - Math.min(coppyArr[2], coppyArr[4]),
                 Math.max(coppyArr[3], coppyArr[5]) - Math.min(coppyArr[3], coppyArr[5]),
                 coppyArr[6], coppyArr[7],
                 Math.max(coppyArr[2], coppyArr[4]) - Math.min(coppyArr[2], coppyArr[4]),
                 Math.max(coppyArr[3], coppyArr[5]) - Math.min(coppyArr[3], coppyArr[5]));
+                if(move){
+                    console.log("enter");
+                    fill(255);
+                    stroke(255);
+                    rect(coppyArr[2], coppyArr[3],
+                        Math.max(coppyArr[2], coppyArr[4]) - Math.min(coppyArr[2], coppyArr[4]),
+                        Math.max(coppyArr[3], coppyArr[5]) - Math.min(coppyArr[3], coppyArr[5]))
+                        move = false;
+                }
+                coppy = false;
         }
         console.log(coppyArr);
         type = null;
+    }
+    else if(selector("#pen-line").checked){
+        type = "line";
+    } else if(selector("#pen-circle").checked){
+        type = "circle";
     }
     else{
         type = null;
